@@ -18,5 +18,9 @@ public class ShapeTest
         shapes.add(shape3);
         shapes.add(sampleText);
 
+        for( Shape shape : shapes){
+            System.out.println(shape);
+        }
+
     }
 }
