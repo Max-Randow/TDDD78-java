@@ -13,7 +13,7 @@ public class Excercise5
      * @param f
      * @return f!
      */
-    static int factorial(int f) {
+    private static int factorial(int f) {
 	if (f == 0){
 	    return 1;
     }

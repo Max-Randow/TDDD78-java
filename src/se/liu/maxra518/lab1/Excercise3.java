@@ -5,8 +5,8 @@ import javax.swing.*;
 public class Excercise3
 {
 
-    static String input =  JOptionPane.showInputDialog("Please input a value");
-    static int tabell = Integer.parseInt(input);
+    private static final String PLEASE_INPUT_A_VALUE =  JOptionPane.showInputDialog("Please input a value");
+    private static int tabell = Integer.parseInt(PLEASE_INPUT_A_VALUE);
 
 
     public static void main(String[] args) {
