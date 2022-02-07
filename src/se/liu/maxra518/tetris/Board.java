@@ -4,6 +4,8 @@ package se.liu.maxra518.tetris;
 import java.awt.*;
 import java.util.Random;
 
+
+
 public class Board
 {
     private SquareType[][] squares;

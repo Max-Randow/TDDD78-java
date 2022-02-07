@@ -1,14 +1,25 @@
 package se.liu.maxra518.lab1;
 
+import javax.swing.*;
+
+
 public class Excercise2
 {
     public static void main(String[] args) {
 	final int min = 10;
 	final int max = 20;
-
-	System.out.println(sumFor(min,max));
-	System.out.println(sumWhile(min,max));
-
+    
+    String option = JOptionPane.showInputDialog("Skriv 'for', eller 'while'");
+    
+    switch (option) {
+        case "for" :
+        System.out.println(sumFor(min ,max));
+        break;
+        case "while" :
+        System.out.println(sumWhile(min, max));
+        break;
+        }
+        
 
 	
     }
