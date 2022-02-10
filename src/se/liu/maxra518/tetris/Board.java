@@ -2,6 +2,8 @@ package se.liu.maxra518.tetris;
 
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -13,15 +15,15 @@ public class Board
     private int width;
     private final static Random RND = new Random();
     private Poly falling;
-    private Point polyPos;
-
+    private Point fallingPos;
+    private List<BoardListener> boardListeners = new ArrayList<>();
 
     public Board(final int height, final int width){
 	this.height = height;
 	this.width = width;
 	this.squares = new SquareType[height][width];
 	falling = new TetrominoMaker().getPoly(1);
-	polyPos = new Point(0,0);
+	fallingPos = new Point(0, 0);
 
 	for (int i = 0; i < height; i++) {
 	    for (int j = 0; j < width; j++) {
@@ -43,6 +45,7 @@ public class Board
 	    }
 
 	}
+	notifyListeners();
     }
 
     //xxx
@@ -51,9 +54,9 @@ public class Board
 
 
 
-    public SquareType getVisableSquareAt(int x, int y){
-	int fallingPosX = (int)polyPos.getX();
-	int fallingPosY = (int)polyPos.getY();
+    public SquareType getVisiableSquareAt(int x, int y){
+	int fallingPosX = (int) fallingPos.getX();
+	int fallingPosY = (int) fallingPos.getY();
 
 	// Look at board
 	if(x > fallingPosX + falling.getWidth()-1 )	{return getSquareType(y,x);}
@@ -68,10 +71,36 @@ public class Board
 	}
     }
 
-
-
-    public static void main(String[] args) {
-	Board board = new Board(4,5);
-	System.out.println(board);
+    public void addBoardListener(BoardListener bl){
+	boardListeners.add(bl);
     }
+    private void notifyListeners(){
+	for (BoardListener boardListener : boardListeners) {
+	    boardListener.boardChanged();
+	}
+    }
+    public void tick(){
+	if (falling != null) {moveFalling(0,1);}
+	else {setFalling();}
+
+	notifyListeners();
+    }
+    public void setFalling(){
+	falling = new TetrominoMaker().getPoly(1);
+	fallingPos = new Point(getWidth()/2-falling.getWidth()/2, 0);
+    }
+
+    public void moveFalling(int x,int y){
+	fallingPos.setLocation(fallingPos.getX()+x, fallingPos.getY()+y);
+
+    }
+    public void move(Direction direction){
+	switch (direction){
+	    case LEFT -> moveFalling(-1,0);
+	    case RIGHT -> moveFalling(1,0);
+	}
+	notifyListeners();
+    }
+
+
 }
