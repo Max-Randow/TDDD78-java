@@ -18,10 +18,15 @@ public class TetrisComponent extends JComponent implements BoardListener
 	final InputMap in = pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 	in.put(KeyStroke.getKeyStroke("LEFT"), "left");
 	in.put(KeyStroke.getKeyStroke("RIGHT"), "right");
+	in.put(KeyStroke.getKeyStroke("UP"),"up");
+	in.put(KeyStroke.getKeyStroke("DOWN"),"down");
 
 	final ActionMap act = pane.getActionMap();
 	act.put("left", new MoveAction(Direction.LEFT));
 	act.put("right", new MoveAction(Direction.RIGHT));
+
+	act.put("up", new RotateAction(Direction.RIGHT));
+	act.put("down", new RotateAction(Direction.LEFT));
     }
 
 
@@ -74,10 +79,23 @@ public class TetrisComponent extends JComponent implements BoardListener
 
 	private MoveAction(Direction direction) {
 	    this.direction = direction;
+
 	}
 
 	@Override public void actionPerformed(final ActionEvent e) {
 	    board.move(direction);
+	}
+    }
+    private class RotateAction extends  AbstractAction {
+
+	private final Direction dir;
+
+	private RotateAction(Direction dir){
+	    this.dir = dir;
+	}
+
+	@Override public void actionPerformed(final ActionEvent e) {
+	    board.rotate(dir);
 	}
     }
 }

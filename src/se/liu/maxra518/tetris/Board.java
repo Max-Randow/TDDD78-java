@@ -30,13 +30,13 @@ public class Board
 
 	for (int i = 0; i < height + DOUBLE_MARGIN; i++) {
 	    for (int j = 0; j < width + DOUBLE_MARGIN; j++) {
-		if (i == 0 || i == 1 || i == squares.length - MARGIN || i == squares.length-1) {
+		if (i == 0 || i == 1 || i == squares.length - MARGIN || i == squares.length - 1) {
 		    squares[i][j] = SquareType.OUTSIDE;
-		}
-		else if (j == 0 || j == 1 || j == squares[i].length - MARGIN || j == squares[i].length-1) {
+		} else if (j == 0 || j == 1 || j == squares[i].length - MARGIN || j == squares[i].length - 1) {
 		    squares[i][j] = SquareType.OUTSIDE;
+		} else {
+		    squares[i][j] = SquareType.EMPTY;
 		}
-		else {squares[i][j] = SquareType.EMPTY;}
 	    }
 	}
 
@@ -71,7 +71,9 @@ public class Board
 
 
     public SquareType getVisableSquareAt(int x, int y) {
-	if( falling == null) {return getSquareType(y,x);}
+	if (falling == null) {
+	    return getSquareType(y, x);
+	}
 	int fallingPosX = (int) fallingPos.getX();
 	int fallingPosY = (int) fallingPos.getY();
 
@@ -110,16 +112,18 @@ public class Board
     }
 
     public void tick() {
-	if(falling == null){
+	if (falling == null) {
 	    setFalling();
-	    if(hasCollision()){isGameOver = true;}
+	    if (hasCollision()) {
+		isGameOver = true;
+	    }
 	}
-	if(!isGameOver){
+	if (!isGameOver) {
 
 	    if (falling != null) {
 		moveFalling(0, 1);
-		if(hasCollision()) {
-		    moveFalling(0,-1);
+		if (hasCollision()) {
+		    moveFalling(0, -1);
 
 		    System.out.println("Falling is null");
 
@@ -131,9 +135,12 @@ public class Board
 	    } else {
 		setFalling();
 	    }
+	    clearRows();
+
+
 	    notifyListeners();
 	}
-	System.out.println("Game over");
+
     }
 
     public void setFalling() {
@@ -142,8 +149,12 @@ public class Board
     }
 
     public void moveFalling(int x, int y) {
-	fallingPos.setLocation(fallingPos.getX() + x, fallingPos.getY() + y);
-	if(hasCollision()) {fallingPos.setLocation(fallingPos.getX() -x, fallingPos.getY());}
+	if (falling != null){
+		fallingPos.setLocation(fallingPos.getX() + x, fallingPos.getY() + y);
+		if (hasCollision()) {
+	    	fallingPos.setLocation(fallingPos.getX() - x, fallingPos.getY());
+		}
+	}
     }
 
     public void move(Direction direction) {
@@ -157,29 +168,95 @@ public class Board
     public boolean hasCollision() {
 	int fallingPosX = (int) fallingPos.getX();
 	int fallingPosY = (int) fallingPos.getY();
-	for (int i = 0; i < falling.getHeight() ; i++) {
+	for (int i = 0; i < falling.getHeight(); i++) {
 	    for (int j = 0; j < falling.getWidth(); j++) {
-		if(getSquareType(i + fallingPosY, j + fallingPosX) != SquareType.EMPTY && falling.getSquareType(i,j) != SquareType.EMPTY) {
+		if (getSquareType(i + fallingPosY, j + fallingPosX) != SquareType.EMPTY && falling.getSquareType(i, j) != SquareType.EMPTY) {
 		    System.out.println("hejhej");
-			return true;
+		    return true;
 		}
 	    }
 	}
 	return false;
     }
 
-    public void addToBoard(){
+    public void addToBoard() {
 	int fallingPosX = (int) fallingPos.getX();
 	int fallingPosY = (int) fallingPos.getY();
 
-	for (int i = fallingPosY; i < fallingPosY+falling.getHeight(); i++) {
+	for (int i = fallingPosY; i < fallingPosY + falling.getHeight(); i++) {
 	    for (int j = fallingPosX; j < fallingPosX + falling.getWidth(); j++) {
-		    squares[i+MARGIN][j+MARGIN] = getVisableSquareAt(j,i);
+		squares[i + MARGIN][j + MARGIN] = getVisableSquareAt(j, i);
 	    }
 
 	}
     }
 
+    public void rotate(Direction dir) {
+	Poly fallingCopy = falling;
+	Poly rotatedPoly = null;
+	boolean rotateRight = true;
+	boolean rotateLeft = false;
+	switch (dir) {
+
+	    case RIGHT -> rotatedPoly = falling.rotate(rotateRight);
+	    case LEFT -> rotatedPoly = falling.rotate(rotateLeft);
+	}
+	falling = rotatedPoly;
+	if (hasCollision()) {
+	    // Roation is prohibited, revert rotation
+	    falling = fallingCopy;
+	}
+
+
+    }
+
+    public boolean checkFullRow(int y) {
+	for (int x = MARGIN; x < getWidth()+MARGIN; x++) {
+	    if (squares[y][x] == SquareType.EMPTY) {
+		return false;
+	    }
+
+	}
+	return true;
+    }
+
+    public void clearRows() {
+	int i = getHeight()+MARGIN-1;
+	while(i >= MARGIN) {
+	    	if(checkFullRow(i)){
+
+		for (int y = i; y >= MARGIN; y--) {
+		    if (y == MARGIN) {
+			squares[y] = makeEmptyRow(y);
+
+		    } else {
+			squares[y] = squares[y-1];
+		    }
+
+
+
+		    }
+		}
+		    else {
+			i--;
+		}
+
+	}
+    }
+
+    private SquareType[] makeEmptyRow(int y){
+	SquareType[] row = new SquareType[width + DOUBLE_MARGIN];
+
+	for (int i = 0; i < row.length; i++) {
+	    if(y < MARGIN || i < MARGIN || i >= width + MARGIN || y >= height + MARGIN){
+		row[i] = SquareType.OUTSIDE;
+	    } else {
+		row[i] = SquareType.EMPTY;
+	    }
+	    
+	}
+	return row;
+    }
 
 
 }

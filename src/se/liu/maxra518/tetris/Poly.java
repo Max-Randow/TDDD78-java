@@ -23,7 +23,27 @@ public class Poly
     public int getHeight(){return height;}
     public int getWidth(){return width;}
 
-
+    public Poly rotate(boolean right){
+	Poly rotatedPoly = new Poly(new SquareType[this.getHeight()][this.getWidth()]);
+	if (right) {
+	    for (int r = 0; r < this.getHeight(); r++) {
+		for (int c = 0; c < this.getWidth(); c++) {
+		    rotatedPoly.poly[c][rotatedPoly.getWidth() - 1 - r] = this.poly[r][c];
+		}
+	    }
+	}
+	// Rotate 3 times to the right to rotate the poly left
+	else {
+	    for (int i = 0; i < 3; i++) {
+		for (int r = 0; r < this.getHeight(); r++) {
+		    for (int c = 0; c < this.getWidth(); c++) {
+			rotatedPoly.poly[c][rotatedPoly.getWidth() - 1 - r] = this.poly[r][c];
+		    }
+		}
+	    }
+	}
+	return rotatedPoly;
+    }
 
 
 
