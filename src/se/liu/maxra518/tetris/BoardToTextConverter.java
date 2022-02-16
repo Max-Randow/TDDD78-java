@@ -8,7 +8,7 @@ public class BoardToTextConverter
 	StringBuilder builder = new StringBuilder();
 	for(int i = 0; i < board.getHeight(); i++){
 	    for(int j = 0; j < board.getWidth(); j++){
-		switch (board.getVisiableSquareAt(j, i))
+		switch (board.getVisableSquareAt(j, i))
 		{
 		    case I -> builder.append("I");
 		    case J -> builder.append("J");
@@ -18,6 +18,7 @@ public class BoardToTextConverter
 		    case T -> builder.append("T");
 		    case Z -> builder.append("Z");
 		    case EMPTY -> builder.append("-");
+		    case OUTSIDE -> builder.append("OUT");
 		}
 	    }
 	    builder.append("\n");

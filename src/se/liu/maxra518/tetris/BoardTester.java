@@ -10,7 +10,7 @@ public class BoardTester
 
 
     public static void main(String[] args) {
-	Board testBoard = new Board(24,16);
+	Board testBoard = new Board(16,8);
 	BoardToTextConverter boardToText = new BoardToTextConverter();
 
 

@@ -51,12 +51,12 @@ public class TetrisComponent extends JComponent implements BoardListener
 
 	for (int i = 0; i < board.getHeight(); i++) {
 	    for (int j = 0; j < board.getWidth(); j++) {
-		SquareType type = board.getVisiableSquareAt(j, i);
+		SquareType type = board.getVisableSquareAt(j, i);
 
-		if (type != SquareType.EMPTY) {
+
 		    g2d.setColor(colors.get(type));
 		    g2d.fillRect(j * 50, i * 50, 50, 50);
-		}
+
 	    }
 
 	}
