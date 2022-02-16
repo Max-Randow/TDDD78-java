@@ -31,9 +31,10 @@ public class TetrisComponent extends JComponent implements BoardListener
 
 
     public Dimension getPreferredSize() {
+	double scale = 0.8;
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	screenSize.height = (int) (screenSize.getHeight() * 0.8); // Scale down abit so components can fit
-	screenSize.width = (int) (screenSize.getWidth() * 0.8);
+	screenSize.height = (int) (screenSize.getHeight() * scale); // Scale down abit so components can fit
+	screenSize.width = (int) (screenSize.getWidth() * scale);
 	return screenSize;
     }
 

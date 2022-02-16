@@ -9,12 +9,12 @@ public class TetrisViewer
     private JFrame frame = new JFrame("Hello guyse");
 
     private Board board;
-    private TetrisComponent tetrisComponent;
+    private TetrisComponent tetrisComponent = null;
 
     public TetrisViewer(Board board){
 	this.board = board;
     }
-    private JTextArea textArea;
+    private JTextArea textArea = null;
     public void showBoard(){
 	tetrisComponent = new TetrisComponent(board, frame);
 	frame.add(tetrisComponent);

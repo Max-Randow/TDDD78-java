@@ -144,7 +144,8 @@ public class Board
     }
 
     public void setFalling() {
-	falling = new TetrominoMaker().getPoly(1);
+
+	falling = new TetrominoMaker().getPoly(RND.nextInt(1,7));
 	fallingPos = new Point(getWidth() / 2 - falling.getWidth() / 2, 0);
     }
 
@@ -194,12 +195,11 @@ public class Board
     public void rotate(Direction dir) {
 	Poly fallingCopy = falling;
 	Poly rotatedPoly = null;
-	boolean rotateRight = true;
-	boolean rotateLeft = false;
+
 	switch (dir) {
 
-	    case RIGHT -> rotatedPoly = falling.rotate(rotateRight);
-	    case LEFT -> rotatedPoly = falling.rotate(rotateLeft);
+	    case RIGHT -> rotatedPoly = falling.rotate(true);
+	    case LEFT -> rotatedPoly = falling.rotate(false);
 	}
 	falling = rotatedPoly;
 	if (hasCollision()) {
@@ -210,7 +210,7 @@ public class Board
 
     }
 
-    public boolean checkFullRow(int y) {
+    public boolean isFullRow(int y) {
 	for (int x = MARGIN; x < getWidth()+MARGIN; x++) {
 	    if (squares[y][x] == SquareType.EMPTY) {
 		return false;
@@ -223,7 +223,7 @@ public class Board
     public void clearRows() {
 	int i = getHeight()+MARGIN-1;
 	while(i >= MARGIN) {
-	    	if(checkFullRow(i)){
+	    	if(isFullRow(i)){
 
 		for (int y = i; y >= MARGIN; y--) {
 		    if (y == MARGIN) {
